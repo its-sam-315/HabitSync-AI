@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Analytics from "./Analytics";
 import AICoach from "./AICoach";
+import HabitTracker from "./HabitTracker";
 
 function Home() {
   return (
@@ -17,12 +18,14 @@ function App() {
     <Router>
       <nav style={{ padding: "1rem", background: "#eee" }}>
         <Link to="/" style={{ marginRight: "1rem" }}>Home</Link>
+        <Link to="/tracker" style={{ marginRight: "1rem" }}>Habit Tracker</Link>
         <Link to="/analytics" style={{ marginRight: "1rem" }}>Analytics</Link>
         <Link to="/aicoach">AI Coach</Link>
       </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/tracker" element={<HabitTracker />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/aicoach" element={<AICoach />} />
       </Routes>
