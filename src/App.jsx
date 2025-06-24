@@ -1,21 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Analytics from "./Analytics";
+import AICoach from "./AICoach";
 
 function Home() {
   return (
     <div>
       <h2>Welcome to HabitSync AI</h2>
       <p>This is your home page.</p>
-    </div>
-  );
-}
-
-function AICoach() {
-  return (
-    <div>
-      <h2>AI Coach</h2>
-      <p>Personalized coaching powered by AI.</p>
     </div>
   );
 }
