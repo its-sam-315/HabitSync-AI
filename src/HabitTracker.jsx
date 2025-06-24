@@ -25,18 +25,18 @@ function HabitTracker() {
   };
 
   const saveHabit = async () => {
-    const trimmedHabit = habit.trim();
-    if (!trimmedHabit) return;
+    const trimmed = habit.trim();
+    if (!trimmed) return;
 
     const db = await openDB("habitDB", 1);
     const tx = db.transaction("habits", "readwrite");
     const store = tx.objectStore("habits");
 
     if (editingId !== null) {
-      await store.put({ id: editingId, name: trimmedHabit });
+      await store.put({ id: editingId, name: trimmed, completed: false });
       setEditingId(null);
     } else {
-      await store.add({ name: trimmedHabit, createdAt: new Date() });
+      await store.add({ name: trimmed, createdAt: new Date(), completed: false });
     }
 
     await tx.done;
@@ -58,6 +58,17 @@ function HabitTracker() {
     setEditingId(habit.id);
   };
 
+  const toggleCompletion = async (id, currentStatus) => {
+    const db = await openDB("habitDB", 1);
+    const tx = db.transaction("habits", "readwrite");
+    const store = tx.objectStore("habits");
+    const habit = await store.get(id);
+    habit.completed = !currentStatus;
+    await store.put(habit);
+    await tx.done;
+    loadHabits();
+  };
+
   return (
     <div style={{ padding: "1rem" }}>
       <h2>Track Your Habits</h2>
@@ -74,17 +85,23 @@ function HabitTracker() {
 
       <ul style={{ marginTop: "1rem" }}>
         {habits.map((h) => (
-          <li key={h.id} style={{ marginBottom: "0.5rem" }}>
-            {h.name}
-            <button
-              onClick={() => startEditing(h)}
-              style={{ marginLeft: "1rem", padding: "0.25rem 0.5rem" }}
-            >
+          <li key={h.id} style={{ marginBottom: "0.75rem" }}>
+            <input
+              type="checkbox"
+              checked={h.completed}
+              onChange={() => toggleCompletion(h.id, h.completed)}
+              style={{ marginRight: "0.5rem" }}
+            />
+            <span style={{ textDecoration: h.completed ? "line-through" : "none" }}>
+              {h.name}
+            </span>
+
+            <button onClick={() => startEditing(h)} style={{ marginLeft: "1rem" }}>
               Edit
             </button>
             <button
               onClick={() => deleteHabit(h.id)}
-              style={{ marginLeft: "0.5rem", padding: "0.25rem 0.5rem", backgroundColor: "#f66" }}
+              style={{ marginLeft: "0.5rem", backgroundColor: "#f66", color: "#fff" }}
             >
               Delete
             </button>
