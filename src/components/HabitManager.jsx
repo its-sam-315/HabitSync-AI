@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getHabits, addHabit } from '../utils/db';
+import { getHabits, addHabit, updateHabit, deleteHabit } from '../utils/db';
 import HabitCard from './HabitCard';
 
 export default function HabitManager() {
@@ -31,6 +31,26 @@ export default function HabitManager() {
     loadHabits();
   }
 
+  async function handleComplete(id) {
+    const habit = habits.find((h) => h.id === id);
+    if (!habit) return;
+
+    const updated = {
+      ...habit,
+      completed: habit.completed + 1,
+      total: habit.total + 1,
+      streak: habit.streak + 1,
+    };
+
+    await updateHabit(id, updated);
+    loadHabits();
+  }
+
+  async function handleDelete(id) {
+    await deleteHabit(id);
+    loadHabits();
+  }
+
   return (
     <div className="px-6 py-8 max-w-4xl mx-auto">
       <form onSubmit={handleAddHabit} className="flex items-center gap-4 mb-6">
@@ -54,7 +74,12 @@ export default function HabitManager() {
           <p className="text-gray-500 col-span-full">No habits yet. Add one above!</p>
         ) : (
           habits.map((habit) => (
-            <HabitCard key={habit.id} habit={habit} />
+            <HabitCard
+              key={habit.id}
+              habit={habit}
+              onComplete={handleComplete}
+              onDelete={handleDelete}
+            />
           ))
         )}
       </div>
