@@ -1,10 +1,13 @@
 import React from 'react';
 
-export default function HabitCard({ habit }) {
+export default function HabitCard({ habit, onComplete, onDelete }) {
   const { name, streak, completed, total } = habit;
 
   const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
-  const statusColor = streak >= 7 ? 'text-green-600' : streak >= 3 ? 'text-yellow-500' : 'text-red-500';
+  const statusColor =
+    streak >= 7 ? 'text-green-600' :
+    streak >= 3 ? 'text-yellow-500' :
+    'text-red-500';
 
   return (
     <div className="bg-white shadow rounded-md p-4 border hover:shadow-lg transition">
@@ -19,6 +22,21 @@ export default function HabitCard({ habit }) {
       </div>
 
       <p className="mt-1 text-xs text-gray-500">{completed} of {total} completed</p>
+
+      <div className="mt-4 flex justify-between">
+        <button
+          onClick={() => onComplete(habit.id)}
+          className="text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+        >
+          + Complete
+        </button>
+        <button
+          onClick={() => onDelete(habit.id)}
+          className="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
