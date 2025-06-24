@@ -1,20 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Analytics from "./Analytics";
 
 function Home() {
   return (
     <div>
       <h2>Welcome to HabitSync AI</h2>
       <p>This is your home page.</p>
-    </div>
-  );
-}
-
-function Analytics() {
-  return (
-    <div>
-      <h2>Analytics</h2>
-      <p>Here will be the detailed habit tracking analytics.</p>
     </div>
   );
 }
